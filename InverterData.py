@@ -12,7 +12,9 @@ import re
 import json
 import os
 import configparser
+import logging
 from gw2pvo import pvo_api
+from gw2pvo import __version__
 # import datetime
 from datetime import datetime
 
@@ -54,11 +56,22 @@ reg_end2 = (int(configParser.get('SofarInverter', 'register_end2'), 0))
 lang = configParser.get('SofarInverter', 'lang')
 verbose = configParser.get('SofarInverter', 'verbose')
 DomoticzSupport = configParser.get('Domoticz', 'domoticz_support')
-pvo_system_id = int(configParser.get('PVOutput', 'pvo_system_id'))
-pvo_api_key = int(configParser.get('PVOutput', 'pvo_api_key'))
+pvo_system_id = configParser.get('PVOutput', 'pvo_system_id')
+pvo_api_key = configParser.get('PVOutput', 'pvo_api_key')
 # END CONFIG
 
 timestamp = str(datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'))
+
+# Configure the logging
+if verbose == "1":
+    numeric_level = getattr(logging, "debug", None)
+else:
+    numeric_level = getattr(logging, "info", None)
+if not isinstance(numeric_level, int):
+    raise ValueError('Invalid log level: %s' % loglevel)
+logging.basicConfig(format='%(levelname)-8s %(message)s', level=numeric_level)
+logging.debug("gw2pvo version " + __version__)
+
 
 # PREPARE & SEND DATA TO THE INVERTER
 output = "{"  # initialise json output
