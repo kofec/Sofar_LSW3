@@ -64,9 +64,9 @@ timestamp = str(datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'))
 
 # Configure the logging
 if verbose == "1":
-    numeric_level = getattr(logging, "debug", None)
+    numeric_level = getattr(logging, "DEBUG", None)
 else:
-    numeric_level = getattr(logging, "info", None)
+    numeric_level = getattr(logging, "INFO", None)
 if not isinstance(numeric_level, int):
     raise ValueError('Invalid log level: %s' % loglevel)
 logging.basicConfig(format='%(levelname)-8s %(message)s', level=numeric_level)
