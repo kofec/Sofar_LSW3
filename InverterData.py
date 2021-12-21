@@ -12,6 +12,7 @@ import re
 import json
 import os
 import configparser
+from gw2pvo import pvo_api
 # import datetime
 from datetime import datetime
 
@@ -53,6 +54,8 @@ reg_end2 = (int(configParser.get('SofarInverter', 'register_end2'), 0))
 lang = configParser.get('SofarInverter', 'lang')
 verbose = configParser.get('SofarInverter', 'verbose')
 DomoticzSupport = configParser.get('Domoticz', 'domoticz_support')
+pvo_system_id = int(configParser.get('PVOutput', 'pvo_system_id'))
+pvo_api_key = int(configParser.get('PVOutput', 'pvo_api_key'))
 # END CONFIG
 
 timestamp = str(datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'))
@@ -218,3 +221,15 @@ if DomoticzSupport == "1":
 print("*** JSON output:")
 jsonoutput = json.loads(output)
 print(json.dumps(jsonoutput, indent=4, sort_keys=False, ensure_ascii=False))
+
+if pvo_system_id and pvo_api_key:
+    pgrid_w = jsonoutput["Output active power (W)"]
+    eday_kwh = int(jsonoutput["Today production (Wh)"])/1000
+    voltage = jsonoutput["L1 Voltage (V)"]
+    pvo = pvo_api.PVOutputApi(pvo_system_id, pvo_api_key)
+    pvo.add_status(pgrid_w=pgrid_w, eday_kwh=eday_kwh, temperature=None, voltage=voltage)
+else:
+    print(output)
+    print(jsonoutput)
+    print("Missing PVO id and/or key")
+
