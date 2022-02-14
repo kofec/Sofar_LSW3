@@ -16,6 +16,12 @@ libscrc
 paho-mqtt
 influxdb
 ```
+Remove the requirement / functionality for the following Python modules (simplifying the code for support Openwrt):
+```
+libscrc
+paho-mqtt
+influxdb
+```
 
 # Configuration
 
@@ -33,30 +39,6 @@ registerhw_start=0x2000         # Like above, but for InverterHWData.py
 registerhw_end=0x200D           # Like above, but for InverterHWData.py
 lang=                           # Output language (available: PL,EN)
 verbose=0                       # Set to 1 for additional info to be presented (registers, binary packets etc.)
-
-[Prometheus]
-prometheus=0                    # set to 1 to export data in Prometheus metrics format
-prometheus_file=/xx/xx/metrics/index.html  # Path to Prometheus metrics file served by web server
-
-[InfluxDB]
-influxdb=0                      # set to 1 to export data to InfluxDB
-influxdb_host=                  # InfluxDB host (i.e. 127.0.0.1)
-influxdb_port=8086              # InfluxDB port
-influxdb_user=                  # InfluxDB user with permisions to read/write from/to dbname
-influxdb_password=              # User password
-influxdb_dbname=                # Database name 
-
-[MQTT]
-mqtt=0                          # 0: disabled, 1: enabled
-mqtt_server=                    # MQTT server IP address
-mqtt_port=1883                  # MQTT server tcp port
-mqtt_topic=                     # MQTT topic name
-mqtt_username=                  # MQTT access username
-mqtt_passwd=                    # MQTT user password
-mqtt_tls=0                      # Set to 1 to enable TLS support
-mqtt_tls_insecure=True          # Set to False to enable strict server's certificate hostname matching
-mqtt_tls_version=2              # 1 or 2
-mqtt_cacert=                    # CA certificate path/filename
 
 [Domoticz]
 domoticz_support=0              # 0: disabled, 1: enabled
@@ -174,16 +156,6 @@ If You want to rewrite or/add change anything - please fork Your own project.
        e) leave "DomoticzIdx":0 for variables You don't want to send data to Domoticz
        WARNING: When enabled, Domoticz support disables normal MQTT message delivery (all values in one message).
     3. Tested with Mosquitto MQTT server (both with and without TLS) and Domoticz 2021.1
-```
-# Prometheus+Grafana support
-```
-Steps to run Prometheus+Grafana support:
-    1. Configure prometheus options in config.cfg
-    2. Serve prometheus metrics file using any web server (name it index.html to be the default page in configured path)
-    3. Configure prometheus target to access the file 
-    4. Add Prometheus datasource in Grafana
-    5. Import grafana_en/pl.json file (Dashboards->Manage->Import).
-    Enjoy :)
 ```
 # InfluxDB+Grafana support
 ```
