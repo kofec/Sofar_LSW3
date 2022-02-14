@@ -8,13 +8,12 @@ REMARK: To make it work with other inverter brand/model connected via LSW-3/LSE 
 the register's addresses in the .xml files accordingly and change register start/end numbers in config.cfg
 
 *Thanks to @jlopez77 https://github.com/jlopez77 for logger/MODBUS protocol code.*
+*Thanks to @markruys https://github.com/markruys/gw2pvo for command line tool/library to upload solar data from power inverter to the PVOutput.org website..*
 
 # Required python modules
 To run, script requires following python modules:
 ```
-libscrc
-paho-mqtt
-influxdb
+gw2pvo 
 ```
 Remove the requirement / functionality for the following Python modules (simplifying the code for support Openwrt):
 ```
@@ -42,6 +41,11 @@ verbose=0                       # Set to 1 for additional info to be presented (
 
 [Domoticz]
 domoticz_support=0              # 0: disabled, 1: enabled
+
+[PVOutput]
+pvo_system_id=                  # The API Key
+pvo_api_key=                    # The System Id of your device
+
 
 Files SOFARMap.xml and SOFARHWMap.xml contain MODBUS inverter's registers mapping for Sofar Solar K-TLX product line
 and Prometheus/InfluxDB metrics configuration.
@@ -143,26 +147,11 @@ You tell me :)
 Feel free to suggest :)
 If You want to rewrite or/add change anything - please fork Your own project.
 
-# MQTT Support (Domoticz compatible)
+# PVOutput support
 ```
-    1. JSON_attributes_topic (unless Domoticz support enabled !): "mqtt_topic/attributes"
-    2. For TLS support You'll need at least CA Certificate and TLS enabled MQTT
-       To enable TLS for Mosquitto look i.e here: http://www.steves-internet-guide.com/mosquitto-tls/
-    3. To turn Domoticz support on:
-       a) enable it in config.cfg
-       b) set mqtt_topic=domoticz/in in config.cfg
-       c) create virtual devices in Domoticz (write down their idx numbers)
-       d) in SOFARMap.xml find corresponding variables and for each input idx number
-       e) leave "DomoticzIdx":0 for variables You don't want to send data to Domoticz
-       WARNING: When enabled, Domoticz support disables normal MQTT message delivery (all values in one message).
-    3. Tested with Mosquitto MQTT server (both with and without TLS) and Domoticz 2021.1
-```
-# InfluxDB+Grafana support
-```
-Steps to run InfluxDB+Grafana support:
-    1. Configure InfluxDB options in config.cfg
-    2. Create database to store inverter data in InfluxDB (i.e. create database Data)
-    3. Add InfluxDB datasource in Grafana (name it InfluxDB)
-    4. Import grafana_iflux_en/pl.json file (Dashboards->Manage->Import).
-    Enjoy :)
+Steps to run PVOutput support:
+Furthermore, you need a (free) PVOutput account. Register a device and enable the API. From PVOutput you need:
+
+The API Key
+The System Id of your device
 ```
